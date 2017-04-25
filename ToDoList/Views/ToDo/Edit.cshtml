@@ -1,0 +1,128 @@
+﻿@model ToDoList.ViewModel.ToDoFormViewModel
+@{
+    ViewBag.Title = "Edit";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Edit</h2>
+
+<div class="container">
+    <div class="col-sm-offset-4 col-sm-4">
+        <h2 class="col-sm-offset-2">@DateTime.Today.ToShortDateString()</h2>
+
+        <form name="toDoList" class="col-sm-offset-2">
+            <input type="text" name="ListItem" id="namnns"/>
+            <span id="button" class="btn btn-primary">Add</span>
+        </form>
+        <div class="form-group">
+            <p id="hej" ToDoId="@Model.Todo.Id">@Model.Todo.Name</p>
+
+        </div>
+        <br />
+        <ol class="list-group"></ol>
+    </div>
+</div>
+
+@section scripts{
+    <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
+    <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
+
+    <script>
+
+        $(document).ready(function () {
+            var bog = $('#hej').attr('ToDoId')
+            console.log($('#hej').attr('ToDoId'));
+            $.ajax({
+
+                url: "/api/Task?ToDoI="+bog,
+                type: "GET",
+                success: function (data) {
+                    for(var i = 0; i < data.length; i++) 
+                    {
+                        //if (data[i].ToDoId == bog)
+                        //{
+                        $('ol').append('<li id="vae" class="list-group-item" taskIdTo="'+ data[i].Id +'">' + data[i].Name + '<span class="glyphicon glyphicon-trash"></span></li>');
+                        $('.glyphicon').on("click", deleteTask);
+                        //}
+
+                    }
+                }
+
+            })
+
+                $('#button').on("click", create);
+
+                function create() {
+                    var name = $('#namnns').val();
+                    var vm =
+                    {
+                        ToDoId: $('#hej').attr('ToDoId'),
+                        name: name
+                    };
+
+                    //vm.name = name;
+                    $.ajax({
+                        url: "/api/Task/",
+                        method: "post",
+                        data: vm,
+                        success: function (data) {
+                            $('ol').append('<li id="vae" class="list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="glyphicon glyphicon-trash"></span></li>');
+                            $('.glyphicon').on("click", deleteTask);
+
+                        }
+                    });
+
+
+                };
+
+         $("input[name=ListItem]").keyup(function (event) {
+             if (event.keyCode == 13) {
+                 $("#button").click();
+             }
+         });
+
+         $(document).on('dblclick', 'li', function () {
+
+             var status;
+
+             var color = $(this).css("background-color");
+             if (color == "rgb(255, 0, 0)") {
+                 $(this).css("text-decoration", "");
+                 $(this).css("background-color", "transparent");
+                 status = false;
+             }
+             else {
+
+                 $(this).css("text-decoration", "line-through");
+                 $(this).css("background-color", "red");
+                 status = true;
+             }
+             var vm = {
+                 Name: $(this).text(),
+                 Id: $(this).attr('TaskIdTo'),
+                 status: status,
+                 ToDoId: bog
+             };
+
+
+             $.ajax({
+                 url: "/api/task?taskDto=",
+                 method: "put",
+                 data: vm
+             })
+         });
+
+         $('input').focus(function () {
+             $(this).val('');
+         });
+
+         function deleteTask() {
+             $(this).parents('li').remove();
+         };
+         $('ol').sortable();
+
+     }
+ );
+    </script>
+
+}
