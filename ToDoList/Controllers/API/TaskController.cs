@@ -53,20 +53,6 @@ namespace ToDoList.Controllers.API
             return Created(new Uri(Request.RequestUri + "/" + Tasks.Id), TaskDto);
         }
 
-        [HttpDelete]
-        public void DeleteTasks(int Id)
-        {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
-
-            var TasksInDb = _context.Tasks.SingleOrDefault(c => c.Id == Id);
-
-            if (TasksInDb == null)
-                throw new HttpResponseException(HttpStatusCode.NotFound);
-
-            _context.Tasks.Remove(TasksInDb);
-            _context.SaveChanges();
-        }
 
         [HttpPut]
         public void UpdateTask(TaskDto taskDto)
@@ -83,6 +69,23 @@ namespace ToDoList.Controllers.API
 
             Mapper.Map(taskDto, taskInDb);
 
+            _context.SaveChanges();
+        }
+
+        [HttpDelete]
+        public void DeleteTask(int Id)
+        {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+
+
+            var TasksInDb = _context.Tasks.SingleOrDefault(c => c.Id == Id);
+
+            if (TasksInDb == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+            _context.Tasks.Remove(TasksInDb);
             _context.SaveChanges();
         }
 

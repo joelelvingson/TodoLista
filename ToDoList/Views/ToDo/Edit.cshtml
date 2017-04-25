@@ -41,11 +41,16 @@
                     {
                         //if (data[i].ToDoId == bog)
                         //{
-                        $('ol').append('<li id="vae" class="list-group-item" taskIdTo="'+ data[i].Id +'">' + data[i].Name + '<span class="glyphicon glyphicon-trash"></span></li>');
-                        $('.glyphicon').on("click", deleteTask);
+                        $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + ' glyphicon glyphicon-trash pull-right"></span></li>');
+                        $('.' + data[i].Id).on("click", deleteTask);
                         //}
+                        if (data[i].status == true) {
+                            $("." + data[i].Id).css("text-decoration", "line-through");
+                            $("."+data[i].Id).css("background-color", "red");
+                        }
 
                     }
+
                 }
 
             })
@@ -66,7 +71,7 @@
                         method: "post",
                         data: vm,
                         success: function (data) {
-                            $('ol').append('<li id="vae" class="list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="glyphicon glyphicon-trash"></span></li>');
+                            $('ol').append('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + ' glyphicon glyphicon-trash pull-right"></span></li>');
                             $('.glyphicon').on("click", deleteTask);
 
                         }
@@ -117,8 +122,18 @@
          });
 
          function deleteTask() {
+             var button = $(this);
+             $.ajax({
+                 url: "/api/Task?Id=" + $(this).parents('li').attr("taskIdTo"),
+                 method: "DELETE",
+                 success: function () {
+
+                 }
+
+             });
              $(this).parents('li').remove();
          };
+
          $('ol').sortable();
 
      }
