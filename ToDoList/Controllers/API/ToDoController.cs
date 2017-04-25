@@ -30,15 +30,6 @@ namespace ToDoList.Controllers.API
             return ToDoQuery.ToList().Select(Mapper.Map<Todo, ToDoDto>);
         }
 
-        //[HttpGet]
-        //public IHttpActionResult GetToDo(int id)
-        //{
-        //    var ToDo = _context.Todos.SingleOrDefault(t => t.Id == id);
-        //    if (ToDo == null)
-        //        return NotFound();
-        //    return Ok(Mapper.Map<Todo, ToDoDto>(ToDo));
-        //}
-
         [HttpPost]
         public IHttpActionResult CreateToDo(ToDoDto ToDoDto)
         {
@@ -60,11 +51,20 @@ namespace ToDoList.Controllers.API
 
 
             var ToDoInDb = _context.Todos.SingleOrDefault(c => c.Id == Id);
-
+            var TasksInDb = _context.Tasks.Where(e => e.ToDoId == Id);
             if (ToDoInDb == null)
                 throw new HttpResponseException(HttpStatusCode.NotFound);
 
             _context.Todos.Remove(ToDoInDb);
+            if(TasksInDb != null)
+            {
+                foreach (var tasks in TasksInDb)
+                {
+                    _context.Tasks.Remove(tasks);
+                }
+            }
+
+
             _context.SaveChanges();
         }
 

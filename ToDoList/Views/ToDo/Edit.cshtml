@@ -4,19 +4,16 @@
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
 
-<h2>Edit</h2>
-
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
-        <h2 class="col-sm-offset-2">@DateTime.Today.ToShortDateString()</h2>
+        <h2 class="col-sm-offset-2">@Model.Todo.Name</h2>
 
         <form name="toDoList" class="col-sm-offset-2">
             <input type="text" name="ListItem" id="namnns"/>
             <span id="button" class="btn btn-primary">Add</span>
         </form>
         <div class="form-group">
-            <p id="hej" ToDoId="@Model.Todo.Id">@Model.Todo.Name</p>
-
+            <input id="hej" type="hidden" ToDoId="@Model.Todo.Id" />
         </div>
         <br />
         <ol class="list-group"></ol>

@@ -63,10 +63,10 @@
                         method: "post",
                         data: vm,
                         success: function (data) {
-                        $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><button class=' glyphicon glyphicon-edit pull-left'></button><button class='daaa glyphicon glyphicon-trash pull-right'></button><label class='fullnam'>" + name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
-                        $('.fullnam').on("click", da);
-                        $('.daaa').on("click", deleteList);
-                    }
+                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span class='glyphicon glyphicon-edit pull-left'></span><span data-ToDo-Id=" + data.Id + " class='" + data.Id + " glyphicon glyphicon-trash pull-right'></span><label class='fullnam'>" + data.Name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
+                            $('.fullnam').on("click", da);
+                            $('.' + data.Id).on("click", deleteList);
+                        }
                     });
 
                 }
