@@ -6,7 +6,7 @@
 
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
-        <h2 class="col-sm-offset-2">@Model.Todo.Name</h2>
+        <h2 id="namnet" class="col-sm-offset-2">@Model.Todo.Name</h2>
 
         <form name="toDoList" class="col-sm-offset-2">
             <input type="text" name="ListItem" id="namnns"/>
@@ -28,7 +28,6 @@
 
         $(document).ready(function () {
             var bog = $('#hej').attr('ToDoId')
-            console.log($('#hej').attr('ToDoId'));
             $.ajax({
 
                 url: "/api/Task?ToDoI="+bog,
@@ -77,11 +76,11 @@
 
                 };
 
-         $("input[name=ListItem]").keyup(function (event) {
-             if (event.keyCode == 13) {
-                 $("#button").click();
-             }
-         });
+         //$("input[name=ListItem]").keyup(function (event) {
+         //    if (event.keyCode == 13) {
+         //        $("#button").click();
+         //    }
+         //});
 
          $(document).on('dblclick', 'li', function () {
 
@@ -132,7 +131,63 @@
          };
 
          $('ol').sortable();
+         $("#namnet").on("click", editName);
 
+         function editName() {
+             var name = $(this).text();
+             $(this).html('');
+             $('<input></input>')
+               .attr({
+                   'type': 'text',
+                   'name': 'fname',
+                   'id': 'txt_fullname',
+                   'size': '30',
+                   'value': name
+               })
+               .appendTo('#namnet');
+             $('#txt_fullname').focus();
+         };
+
+         $(document).on('blur', '#txt_fullname', function () {
+             var name = $(this).val();
+             if (name == "" || name == " ") {
+                 name = "NULL";
+             }
+             //alert('Make an AJAX call and pass this parameter >> name=' + name);
+             $('#namnet').text(name);
+             editNameApi();
+         });
+
+         $('#namnet').keypress(function (e) {
+             if (e.which == 13) {//Enter key pressed
+                 {
+                 var name = $(this).val();
+                 if (name == "" || name == " ") {
+                     name = "NULL";
+                 }
+                 //alert('Make an AJAX call and pass this parameter >> name=' + name);
+                 $('#namnet').text(name);
+                 editNameApi();
+                 }
+             }
+         });
+
+         function editNameApi() {
+
+             vm = {
+                 Name: $("#namnet").text(),
+                 Id: $('#hej').attr('ToDoId')
+             };
+             console.log(vm.Name);
+             console.log(vm.Id);
+             $.ajax({
+
+                 url: "/api/Todo?toDoDto=",
+                 type: "put",
+                 data: vm
+
+             })
+         };
      }
  );
     </script>

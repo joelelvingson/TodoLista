@@ -36,8 +36,7 @@
                     {
                         $.each(data, function () {
 
-                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span class='glyphicon glyphicon-edit pull-left'></span><span data-ToDo-Id=" + this.Id + " class='" + this.Id + " glyphicon glyphicon-trash pull-right'></span><label class='fullnam'>" + this.Name + "</label><div><a href='/ToDo/edit/" + this.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
-                            $('.fullnam').on("click", da);
+                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + this.Id + " class='" + this.Id + " glyphicon glyphicon-trash pull-right'></span><label class='fullnam'>" + this.Name + "</label><div><a href='/ToDo/edit/" + this.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
                             $('.' + this.Id).on("click", deleteList);
 
                         })
@@ -63,8 +62,7 @@
                         method: "post",
                         data: vm,
                         success: function (data) {
-                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span class='glyphicon glyphicon-edit pull-left'></span><span data-ToDo-Id=" + data.Id + " class='" + data.Id + " glyphicon glyphicon-trash pull-right'></span><label class='fullnam'>" + data.Name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
-                            $('.fullnam').on("click", da);
+                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + data.Id + " class='" + data.Id + " glyphicon glyphicon-trash pull-right'></span><label class='fullnam'>" + data.Name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
                             $('.' + data.Id).on("click", deleteList);
                         }
                     });
@@ -89,42 +87,6 @@
                 $(this).parents(".sad").remove();
 
             };
-
-            function da() {
-                var name = $(this).text();
-                $(this).html('');
-                $('<input></input>')
-                  .attr({
-                      'type': 'text',
-                      'name': 'fname',
-                      'id': 'txt_fullname',
-                      'size': '30',
-                      'value': name
-                  })
-                  .appendTo('.fullnam');
-                $('#txt_fullname').focus();
-            };
-
-            $(document).on('blur', '#txt_fullname', function () {
-                var name = $(this).val();
-                if (name == "" || name == " ") {
-                    name = "NULL";
-                }
-                //alert('Make an AJAX call and pass this parameter >> name=' + name);
-                $('.fullnam').text(name);
-            });
-
-            $('.fullnam').keypress(function (e) {
-                if (e.which == 13) {//Enter key pressed
-                    var name = $(this).val();
-                    if (name == "" || name == " ") {
-                        name = "NULL";
-                    }
-                    //alert('Make an AJAX call and pass this parameter >> name=' + name);
-                    $('.fullnam').text(name);
-                }
-            });
-
 
 
 

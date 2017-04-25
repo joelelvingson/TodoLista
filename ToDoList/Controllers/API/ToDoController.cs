@@ -68,6 +68,24 @@ namespace ToDoList.Controllers.API
             _context.SaveChanges();
         }
 
+        [HttpPut]
+        public void UpdateToDo(ToDoDto toDoDto)
+        {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
+            var ToDoInDb = _context.Todos.SingleOrDefault(c => c.Id == toDoDto.Id);
+
+            if (ToDoInDb == null)
+                throw new HttpResponseException(HttpStatusCode.NotFound);
+
+
+
+            Mapper.Map(toDoDto, ToDoInDb);
+
+            _context.SaveChanges();
+        }
+
 
     }
 }
