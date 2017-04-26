@@ -10,7 +10,7 @@
 
         <form name="toDoList" class="col-sm-offset-2">
             <input type="text" name="ListItem" id="namnns"/>
-            <span id="button" class="btn btn-primary">Add</span>
+            <span id="button" class="btn btn-sm btn-primary">Add</span>
         </form>
         <div class="form-group">
             <input id="hej" type="hidden" ToDoId="@Model.Todo.Id" />
@@ -37,8 +37,8 @@
                     {
                         //if (data[i].ToDoId == bog)
                         //{
-                        $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + ' glyphicon glyphicon-trash pull-right"></span></li>');
-                        $('.' + data[i].Id).on("click", deleteTask);
+                        $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+                        $('.' + data[i].Id + '100').on("click", deleteTask);
                         //}
                         if (data[i].status == true) {
                             $("." + data[i].Id).css("text-decoration", "line-through");
@@ -67,8 +67,8 @@
                         method: "post",
                         data: vm,
                         success: function (data) {
-                            $('ol').append('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + ' glyphicon glyphicon-trash pull-right"></span></li>');
-                            $('.glyphicon').on("click", deleteTask);
+                            $('ol').append('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+                            $('.' + data.Id +'100').on("click", deleteTask);
 
                         }
                     });
@@ -82,7 +82,7 @@
          //    }
          //});
 
-         $(document).on('dblclick', 'li', function () {
+         $(document).on('click', 'li', function () {
 
              var status;
 
@@ -95,7 +95,7 @@
              else {
 
                  $(this).css("text-decoration", "line-through");
-                 $(this).css("background-color", "red");
+                 $(this).animate({"background-color": "red"}, 'slow');
                  status = true;
              }
              var vm = {
