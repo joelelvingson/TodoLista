@@ -34,8 +34,14 @@ namespace ToDoList.Controllers
 
         public ActionResult New()
         {
+            var ToDoLists = _context.Todos;
+            var ToDoList = new ListFormViewModel()
+            {
+                ToDos = ToDoLists.ToList()
+            };
 
-            return View();
+
+            return View("New", ToDoList);
         }
     }
 

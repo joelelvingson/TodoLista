@@ -240,6 +240,7 @@
     <Compile Include="Models\Todo.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Startup.cs" />
+    <Compile Include="ViewModel\ListFormViewModel.cs" />
     <Compile Include="ViewModel\ToDoFormViewModel.cs" />
   </ItemGroup>
   <ItemGroup>

@@ -1,4 +1,4 @@
-﻿@model dynamic  
+﻿@model ToDoList.ViewModel.ListFormViewModel
 @{
     ViewBag.Title = "New";
     Layout = "~/Views/Shared/_Layout.cshtml";
@@ -7,10 +7,22 @@
     <div class="container">
         <h2>Dina listor</h2>
         <div id="newToDo">
+            @foreach (var item in Model.ToDos)
+            {
+                <div class='sad col-lg-3 text-center '>
+                    <div class='span3 offset3 well'>
+                        <span id="@item.Id" data-ToDo-Id="@item.Id" class='@item.Id glyphicon glyphicon-remove pull-right'></span>
+                        <label class='fullnam'>@item.Name</label>
+                        <div>
+                            <a href='/ToDo/edit/@item.Id' class='btn btn-primary'>Öppna lista</a>
+                        </div>
+                    </div>
+                </div>
+            }
+
             <div class="col-lg-3 text-center">
                 <div class="span3 offset3 well">
                     <input id="namnet" type="text" value="Namnge mig" />
-
                     <a class="ToDoLists btn btn-primary">Skapa lista</a>
                 </div>
             </div>
@@ -27,20 +39,23 @@
 
         $(document).ready(function () {
 
-                $.ajax( {
-                    url: "/api/ToDo",
-                    method: "GET",
-                    success: function(data)
-                    {
-                        $.each(data, function () {
+            //$.ajax( {
+            //    url: "/api/ToDo",
+            //    method: "GET",
+            //    success: function(data)
+            //    {
+            //        $.each(data, function () {
 
-                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + this.Id + " class='" + this.Id + " glyphicon glyphicon-remove pull-right'></span><label class='fullnam'>" + this.Name + "</label><div><a href='/ToDo/edit/" + this.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
-                            $('.' + this.Id).on("click", deleteList);
+            //            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + this.Id + " class='" + this.Id + " glyphicon glyphicon-remove pull-right'></span><label class='fullnam'>" + this.Name + "</label><div><a href='/ToDo/edit/" + this.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
+            //            $('.' + this.Id).on("click", deleteList);
 
-                        })
-                    }
+            //        })
+            //    }
 
-                });
+            //});
+
+            $(".glyphicon-remove").on("click", deleteList);
+
 
             function add() {
                 var name = $("#namnet").val();
@@ -74,7 +89,7 @@
 
             function deleteList() {
                 var button = $(this);
-                $.ajax( {
+                $.ajax({
                     url: "/api/ToDo/" + button.attr("data-ToDo-Id"),
                     method: "DELETE",
                     success: function () {
