@@ -42,7 +42,7 @@
                         //}
                         if (data[i].status == true) {
                             $("." + data[i].Id).css("text-decoration", "line-through");
-                            $("."+data[i].Id).css("background-color", "red");
+                            $("."+data[i].Id).css("background-color", "grey");
                         }
 
                     }
@@ -87,16 +87,20 @@
              var status;
 
              var color = $(this).css("background-color");
-             if (color == "rgb(255, 0, 0)") {
+             if (color == "rgb(128, 128, 128)") {
                  $(this).css("text-decoration", "");
-                 $(this).css("background-color", "transparent");
+                 $(this).animate({ "background-color": "transparent" }, 'slow');
+
+
                  status = false;
+                 $(this).prependTo('ol');
              }
              else {
 
                  $(this).css("text-decoration", "line-through");
-                 $(this).animate({"background-color": "red"}, 'slow');
+                 $(this).animate({ "background-color": "gray" }, 'slow');
                  status = true;
+                 $(this).appendTo('ol');
              }
              var vm = {
                  Name: $(this).text(),
