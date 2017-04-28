@@ -10,7 +10,7 @@
             <input type="text" name="ListItem" id="namnns" />
             <span id="button" class="btn btn-sm btn-primary">Add</span>
             @Html.ValidationMessageFor(m=>m.Tasks)
-            <label id="fel"></label>
+            <label id="fel" style="color:red;"></label>
         </form>
 
         <div class="form-group">
@@ -97,14 +97,7 @@
                 var vm =
                 {
                     ToDoId: bog,
-                    name: name,
-                    error: function () {
-                        $("#fel").text("Du måste ange ett namn.");
-                    },
-                    success: function () {
-                        $("#fel").text("ds");
-
-                    }
+                    name: name
                 };
 
                 //vm.name = name;
@@ -113,10 +106,13 @@
                     method: "post",
                     data: vm,
                     success: function (data) {
-                        $('ol').append('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+                        $('ol').prepend('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
                         $('.' + data.Id + '100').on("click", deleteTask);
                         $('.' + data.Id).on("click", movePost);
-
+                        $("#fel").text("");
+                    },
+                    error: function () {
+                        $("#fel").text("Du måste ange ett namn.");
                     }
                 });
 

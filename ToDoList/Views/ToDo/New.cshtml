@@ -20,12 +20,15 @@
                 </div>
             }
 
+
             <div class="col-lg-3 text-center">
                 <div class="span3 offset3 well">
                     <input id="namnet" type="text" value="Namnge mig" />
                     <a class="ToDoLists btn btn-primary">Skapa lista</a>
+                    <label id="fel" style="color:red;"></label>
                 </div>
             </div>
+
         </div>
 
     </div>
@@ -60,28 +63,21 @@
             function add() {
                 var name = $("#namnet").val();
                 var vm = {
-                    name
+                    name: name
                 };
-                if (name === "") {
-                    console.log(NEJ);
-                }
-                else if (name.length <= 3) {
-                    console.log(NEJ);
-                }
-                else {
-                    vm.name = name;
-                    $.ajax({
-                        url: "/api/ToDo/",
-                        method: "post",
-                        data: vm,
-                        success: function (data) {
-                            $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + data.Id + " class='" + data.Id + " glyphicon glyphicon-remove pull-right'></span><label class='fullnam'>" + data.Name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
-                            $('.' + data.Id).on("click", deleteList);
-                        }
-                    });
-
-                }
-
+                $.ajax({
+                    url: "/api/ToDo/",
+                    method: "post",
+                    data: vm,
+                    success: function (data) {
+                        $("#newToDo").prepend("<div class='sad col-lg-3 text-center '><div class='span3 offset3 well'><span data-ToDo-Id=" + data.Id + " class='" + data.Id + " glyphicon glyphicon-remove pull-right'></span><label class='fullnam'>" + data.Name + "</label><div><a href='/ToDo/edit/" + data.Id + "' class='btn btn-primary'>Öppna lista</a></div></div></div>");
+                        $('.' + data.Id).on("click", deleteList);
+                        $("#fel").text("");
+                    },
+                    error: function () {
+                        $("#fel").text("Du måste ange ett namn.");
+                    }
+                });
 
             };
 

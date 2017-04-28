@@ -24,9 +24,6 @@ namespace ToDoList.Controllers.API
         {
             var ToDoQuery = _context.Todos;
 
-            //if (!string.IsNullOrWhiteSpace(query))
-            //    ToDoQuery = ToDoQuery.Where(t => t.Name.Contains(query));
-
             return ToDoQuery.ToList().Select(Mapper.Map<Todo, ToDoDto>);
         }
 
