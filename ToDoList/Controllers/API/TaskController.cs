@@ -44,6 +44,9 @@ namespace ToDoList.Controllers.API
         [HttpPost]
         public IHttpActionResult CreateToDo(TaskDto TaskDto)
         {
+            if (!ModelState.IsValid)
+                throw new HttpResponseException(HttpStatusCode.BadRequest);
+
             var Tasks = Mapper.Map<TaskDto, Tasks>(TaskDto);
             _context.Tasks.Add(Tasks);
             _context.SaveChanges();

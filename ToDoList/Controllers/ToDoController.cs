@@ -20,13 +20,14 @@ namespace ToDoList.Controllers
         public ActionResult Edit(int Id)
         {
             var ToDoList = _context.Todos.SingleOrDefault(t => t.Id == Id);
+            var TaskList = _context.Tasks.Where(t => t.ToDoId == Id);
             if (ToDoList == null)
                 HttpNotFound();
 
             var ToDoListView = new ToDoFormViewModel
             {
                 Todo = ToDoList,
-                Tasks = _context.Tasks.ToList()
+                Tasks = TaskList.ToList()
             };
 
             return View("Edit", ToDoListView);

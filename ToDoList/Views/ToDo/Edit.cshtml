@@ -3,20 +3,50 @@
     ViewBag.Title = "Edit";
     Layout = "~/Views/Shared/_Layout.cshtml";
 }
-
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
         <h2 id="namnet" class="col-sm-offset-2">@Model.Todo.Name</h2>
-
         <form name="toDoList" class="col-sm-offset-2">
             <input type="text" name="ListItem" id="namnns" />
             <span id="button" class="btn btn-sm btn-primary">Add</span>
+            @Html.ValidationMessageFor(m=>m.Tasks)
+            <label id="fel"></label>
         </form>
+
         <div class="form-group">
             <input id="hej" type="hidden" ToDoId="@Model.Todo.Id" />
         </div>
-        <br />
-        <ol class="list-group"></ol>
+        
+        
+        <ol class="list-group">
+            @{ 
+                List<ToDoList.Models.Tasks> hsej = new List<ToDoList.Models.Tasks>();
+            }
+            @foreach (var item in Model.Tasks)
+            {
+                if(item.status != true)
+                {
+                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">
+                    @item.Name
+                    <span class="@item.Id glyphicon glyphicon-remove pull-right"></span>
+                </li>
+                }
+                else
+                {
+                    hsej.Add(item);
+                }
+
+
+
+            }
+            @foreach (var item in hsej)
+            {
+                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">
+                    @item.Name
+                    <span class="@item.Id glyphicon glyphicon-remove pull-right"></span>
+                </li>
+            }
+        </ol>
     </div>
 </div>
 
@@ -25,48 +55,56 @@
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
 
     <script>
-
+         
         $(document).ready(function () {
             var bog = $('#hej').attr('ToDoId')
-            $.ajax({
+            //$.ajax({
 
-                url: "/api/Task?ToDoI=" + bog,
-                type: "GET",
-                success: function (data) {
-                    for (var i = 0; i < data.length; i++) {
-                        if (data[i].status == true)
-                        {
-                            //if (data[i].ToDoId == bog)
-                            //{
-                            $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
-                            //}
+            //    url: "/api/Task?ToDoI=" + bog,
+            //    type: "GET",
+            //    success: function (data) {
+            //        for (var i = 0; i < data.length; i++) {
+            //            if (data[i].status == true) {
+            //                //if (data[i].ToDoId == bog)
+            //                //{
+            //                $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+            //                //}
 
-                                $("." + data[i].Id).css("text-decoration", "line-through");
-                                $("." + data[i].Id).css("background-color", "grey");
-                            
-                        }
-                        else
-                        {
-                            $('ol').prepend('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
-                        }
-                        $('.' + data[i].Id + '100').on("click", deleteTask);
-                        $('.' + data[i].Id).on("click", movePost);
+            //                $("." + data[i].Id).css("text-decoration", "line-through");
+            //                $("." + data[i].Id).css("background-color", "grey");
 
-                        
-                    }
+            //            }
+            //            else {
+            //                $('ol').prepend('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+            //            }
+            //            $('.' + data[i].Id + '100').on("click", deleteTask);
+            //            $('.' + data[i].Id).on("click", movePost);
 
-                }
 
-            })
+            //        }
 
+            //    }
+
+            //})
+
+
+            $('.glyphicon-remove').on("click", deleteTask);
+            $(".list-group-item").on("click", movePost);
             $('#button').on("click", create);
 
             function create() {
                 var name = $('#namnns').val();
                 var vm =
                 {
-                    ToDoId: $('#hej').attr('ToDoId'),
-                    name: name
+                    ToDoId: bog,
+                    name: name,
+                    error: function () {
+                        $("#fel").text("Du måste ange ett namn.");
+                    },
+                    success: function () {
+                        $("#fel").text("ds");
+
+                    }
                 };
 
                 //vm.name = name;
@@ -183,7 +221,7 @@
 
                 vm = {
                     Name: $("#namnet").text(),
-                    Id: $('#hej').attr('ToDoId')
+                    Id: bog
                 };
                 console.log(vm.Name);
                 console.log(vm.Id);
@@ -200,3 +238,4 @@
     </script>
 
 }
+
