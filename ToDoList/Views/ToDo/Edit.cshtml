@@ -5,22 +5,37 @@
 }
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
-        <h2 id="namnet" class="col-sm-offset-2">@Model.Todo.Name</h2>
-        <form name="toDoList" class="col-sm-offset-2">
-            <input type="text" name="ListItem" id="namnns" />
-            <span id="button" class="btn btn-sm btn-primary">Add</span>
-            @Html.ValidationMessageFor(m=>m.Tasks)
-            <label id="fel" style="color:red;"></label>
-        </form>
+        <h2 id="namnet">@Model.Todo.Name</h2>
+        <div class="form-group">
+            @*<form name="toDoList" class="col-sm-offset-2">            </form>*@
+            @*<div class="form-horizontal">
+                <button id="button" class="btn btn-primary">Add</button>
+                    <input type="text" name="ListItem" id="namnns" class="form-control" />
+
+                    <label id="fel" style="color:red;"></label>
+            </div>*@
+
+        </div>
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="input-group">
+                    <input type="text" name="ListItem" id="namnns" class="form-control" placeholder="Namn..."/>
+                    <span class="input-group-btn">
+                        <span id="button" class="btn btn-primary" type="button">Lägg till</span>
+                    </span>
+                </div>
+                <label id="fel" style="color:red;"></label>
+            </div>
+        </div>
 
         <div class="form-group">
-            <input id="hej" type="hidden" ToDoId="@Model.Todo.Id" />
+            <input id="hamta" type="hidden" ToDoId="@Model.Todo.Id" />
         </div>
         
         
         <ol class="list-group">
             @{ 
-                List<ToDoList.Models.Tasks> hsej = new List<ToDoList.Models.Tasks>();
+                List<ToDoList.Models.Tasks> SorteradLista = new List<ToDoList.Models.Tasks>();
             }
             @foreach (var item in Model.Tasks)
             {
@@ -33,13 +48,13 @@
                 }
                 else
                 {
-                    hsej.Add(item);
+                    SorteradLista.Add(item);
                 }
 
 
 
             }
-            @foreach (var item in hsej)
+            @foreach (var item in SorteradLista)
             {
                 <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">
                     @item.Name
@@ -50,6 +65,8 @@
     </div>
 </div>
 
+
+
 @section scripts{
     <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/themes/smoothness/jquery-ui.css" />
     <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.3/jquery-ui.min.js"></script>
@@ -57,15 +74,15 @@
     <script>
          
         $(document).ready(function () {
-            var bog = $('#hej').attr('ToDoId')
+            var IdFranDiv = $('#hamta').attr('ToDoId')
             //$.ajax({
 
-            //    url: "/api/Task?ToDoI=" + bog,
+            //    url: "/api/Task?ToDoI=" + IdFranDiv,
             //    type: "GET",
             //    success: function (data) {
             //        for (var i = 0; i < data.length; i++) {
             //            if (data[i].status == true) {
-            //                //if (data[i].ToDoId == bog)
+            //                //if (data[i].ToDoId == IdFranDiv)
             //                //{
             //                $('ol').append('<li class="' + data[i].Id + ' list-group-item" taskIdTo="' + data[i].Id + '">' + data[i].Name + '<span class="' + data[i].Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
             //                //}
@@ -96,11 +113,10 @@
                 var name = $('#namnns').val();
                 var vm =
                 {
-                    ToDoId: bog,
+                    ToDoId: IdFranDiv,
                     name: name
                 };
 
-                //vm.name = name;
                 $.ajax({
                     url: "/api/Task/",
                     method: "post",
@@ -143,7 +159,7 @@
                     Name: $(this).text(),
                     Id: $(this).attr('TaskIdTo'),
                     status: status,
-                    ToDoId: bog
+                    ToDoId: IdFranDiv
                 };
 
 
@@ -217,7 +233,7 @@
 
                 vm = {
                     Name: $("#namnet").text(),
-                    Id: bog
+                    Id: IdFranDiv
                 };
                 console.log(vm.Name);
                 console.log(vm.Id);
