@@ -1,0 +1,20 @@
+﻿@model ToDoList.Models.Todo
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>Index</h2>
+
+@using (Html.BeginForm("Create", "Validering"))
+{
+    @Html.TextBoxFor(m => m.Name)
+    @Html.ValidationMessageFor(m => m.Name)
+    <button type="submit">dsa</button>
+}
+
+@section scripts{
+@Scripts.Render("~/bundles/jqueryval")    
+}
+
