@@ -126,9 +126,12 @@
                         $('.' + data.Id + '100').on("click", deleteTask);
                         $('.' + data.Id).on("click", movePost);
                         $("#fel").text("");
+                        $("#namnns").css("border", "");
+
                     },
                     error: function () {
                         $("#fel").text("Du måste ange ett namn.");
+                        $("#namnns").css("border", "2px solid red");
                     }
                 });
 
@@ -225,6 +228,15 @@
                         //alert('Make an AJAX call and pass this parameter >> name=' + name);
                         $('#namnet').text(name);
                         editNameApi();
+                    }
+                }
+            });
+
+            $('#namnns').keypress(function (e) {
+                if (e.which == 13) {
+                    {
+                        create();
+                        $(this).val("");
                     }
                 }
             });
