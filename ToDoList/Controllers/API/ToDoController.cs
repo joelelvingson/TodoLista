@@ -7,6 +7,7 @@ using System.Web.Http;
 using ToDoList.Models;
 using ToDoList.Dto;
 using AutoMapper;
+using Microsoft.AspNet.Identity;
 
 namespace ToDoList.Controllers.API
 {
@@ -31,6 +32,7 @@ namespace ToDoList.Controllers.API
         public IHttpActionResult CreateToDo(ToDoDto ToDoDto)
         {
             var toDo = Mapper.Map<ToDoDto, Todo>(ToDoDto);
+            toDo.User = User.Identity.GetUserId();
             _context.Todos.Add(toDo);
             _context.SaveChanges();
 

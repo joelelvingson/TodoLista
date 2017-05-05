@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.AspNet.Identity;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Web;
@@ -17,12 +18,21 @@ namespace ToDoList.Controllers
             _context = new ApplicationDbContext();
         }
         // GET: ToDo
+        [Authorize]
         public ActionResult Edit(int Id)
         {
+            var user = User.Identity.GetUserId();
+
             var ToDoList = _context.Todos.SingleOrDefault(t => t.Id == Id);
             var TaskList = _context.Tasks.Where(t => t.ToDoId == Id);
+
+            if (ToDoList.User != user)
+            {
+                return HttpNotFound();
+            }
+
             if (ToDoList == null)
-                HttpNotFound();
+                return HttpNotFound();
 
             var ToDoListView = new ToDoFormViewModel
             {
@@ -33,9 +43,11 @@ namespace ToDoList.Controllers
             return View("Edit", ToDoListView);
         }
 
+        [Authorize]
         public ActionResult New()
         {
-            var ToDoLists = _context.Todos;
+            var user = User.Identity.GetUserId();
+            var ToDoLists = _context.Todos.Where(m=>m.User == user);
             var ToDoList = new ListFormViewModel()
             {
                 ToDos = ToDoLists.ToList()
