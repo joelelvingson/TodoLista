@@ -5,23 +5,24 @@
 }
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
-        <h2 id="namnet">@Model.Todo.Name</h2>
+        <h2 id="ToDoName">@Model.Todo.Name</h2>
         @*<div class="form-group">
             @*<form name="toDoList" class="col-sm-offset-2">            </form>*@
             @*<div class="form-horizontal">
-                <button id="button" class="btn btn-primary">Add</button>
-                    <input type="text" name="ListItem" id="namnns" class="form-control" />
+                <button id="AddToDo" class="btn btn-primary">Add</button>
+                    <input type="text" name="ListItem" id="ToDoInput" class="form-control" />
 
                     <label id="fel" style="color:red;"></label>
             </div>*@
-
         @*</div>*@
+
         <div class="row">
             <div class="col-lg-12">
                 <div class="input-group">
-                    <input type="text" name="ListItem" id="namnns" class="form-control" placeholder="Namn..."/>
+                    <input type="text" name="ListItem" id="ToDoAdd" class="form-control" placeholder="Namn..."/>
+
                     <span class="input-group-btn">
-                        <span id="button" class="btn btn-primary" type="button">Lägg till</span>
+                        <span id="AddToDo" class="btn btn-primary" type="button">Lägg till</span>
                     </span>
                 </div>
                 <label id="fel" style="color:red;"></label>
@@ -41,10 +42,7 @@
             {
                 if(item.status != true)
                 {
-                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">
-                    @item.Name
-                    <span class="@item.Id glyphicon glyphicon-remove pull-right"></span>
-                </li>
+                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">@item.Name<span class="@item.Id glyphicon glyphicon-remove pull-right"></span></li>
                 }
                 else
                 {
@@ -56,10 +54,7 @@
             }
             @foreach (var item in SorteradLista)
             {
-                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">
-                    @item.Name
-                    <span class="@item.Id glyphicon glyphicon-remove pull-right"></span>
-                </li>
+                <li class="@item.Id list-group-item" taskIdTo="@item.Id" style="@(item.status == true ? "background-color: gray; text-decoration: line-through;" : null)">@item.Name<span class="@item.Id glyphicon glyphicon-remove pull-right"></span></li>
             }
         </ol>
     </div>
@@ -74,6 +69,16 @@
     <script>
          
         $(document).ready(function () {
+
+            $('#ToDoAdd').keypress(function (e) {
+                if (e.which == 13) {
+                    {
+                        e.preventDefault();
+                        create();
+                        $(this).val("");
+                    }
+                }
+            });
             var IdFranDiv = $('#hamta').attr('ToDoId')
             //$.ajax({
 
@@ -107,33 +112,43 @@
 
             $('.glyphicon-remove').on("click", deleteTask);
             $(".list-group-item").on("click", movePost);
-            $('#button').on("click", create);
+            $('#AddToDo').on("click", create);
 
             function create() {
-                var name = $('#namnns').val();
+
+                var name = $('#ToDoAdd').val();
                 var vm =
                 {
                     ToDoId: IdFranDiv,
                     name: name
                 };
 
-                $.ajax({
-                    url: "/api/Task/",
-                    method: "post",
-                    data: vm,
-                    success: function (data) {
-                        $('ol').prepend('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
-                        $('.' + data.Id + '100').on("click", deleteTask);
-                        $('.' + data.Id).on("click", movePost);
-                        $("#fel").text("");
-                        $("#namnns").css("border", "");
+                if (name == "")
+                {
+                    $("#fel").text("Du måste ange ett namn.");
+                }
+                else
+                {
+                    $.ajax({
+                        url: "/api/Task/",
+                        method: "post",
+                        data: vm,
+                        success: function (data) {
+                            $('ol').prepend('<li class="' + data.Id + ' list-group-item" taskIdTo="' + data.Id + '">' + data.Name + '<span class="' + data.Id + '100 glyphicon glyphicon-remove pull-right"></span></li>');
+                            $('.' + data.Id + '100').on("click", deleteTask);
+                            $('.' + data.Id).on("click", movePost);
+                            $("#fel").text("");
+                            $("#ToDoAdd").css("border", "");
 
-                    },
-                    error: function () {
-                        $("#fel").text("Du måste ange ett namn.");
-                        $("#namnns").css("border", "2px solid red");
-                    }
-                });
+                        },
+                        error: function () {
+                            $("#fel").text("Något gick fel.");
+                            $("#ToDoAdd").css("border", "2px solid red");
+                        }
+                    });
+                }
+
+
 
 
             };
@@ -142,12 +157,12 @@
 
                 var status;
 
+                var CurrentName = $(this).text();
+
                 var color = $(this).css("background-color");
                 if (color == "rgb(128, 128, 128)") {
                     $(this).css("text-decoration", "");
                     $(this).animate({ "background-color": "transparent" }, 'slow');
-
-
                     status = false;
                     $(this).prependTo('ol');
                 }
@@ -159,11 +174,12 @@
                     $(this).appendTo('ol');
                 }
                 var vm = {
-                    Name: $(this).text(),
+                    Name: CurrentName,
                     Id: $(this).attr('TaskIdTo'),
                     status: status,
                     ToDoId: IdFranDiv
                 };
+
 
 
                 $.ajax({
@@ -191,7 +207,7 @@
             };
 
             $('ol').sortable();
-            $("#namnet").on("click", editName);
+            $("#ToDoName").on("click", editName);
 
             function editName() {
                 var name = $(this).text();
@@ -202,49 +218,35 @@
                       'name': 'fname',
                       'id': 'txt_fullname',
                       'size': '30',
-                      'value': name
+                      'value': name,
+                      'class': 'form-control'
                   })
-                  .appendTo('#namnet');
+                  .appendTo('#ToDoName');
                 $('#txt_fullname').focus();
             };
 
             $(document).on('blur', '#txt_fullname', function () {
                 var name = $(this).val();
-                if (name == "" || name == " ") {
-                    name = "NULL";
-                }
-                //alert('Make an AJAX call and pass this parameter >> name=' + name);
-                $('#namnet').text(name);
+                $('#ToDoName').text(name);
                 editNameApi();
             });
 
-            $('#namnet').keypress(function (e) {
+            $('#ToDoName').keypress(function (e) {
                 if (e.which == 13) {//Enter key pressed
                     {
+                       
                         var name = $(this).val();
-                        if (name == "" || name == " ") {
-                            name = "NULL";
-                        }
-                        //alert('Make an AJAX call and pass this parameter >> name=' + name);
-                        $('#namnet').text(name);
+                        $('#ToDoName').text(name);
                         editNameApi();
                     }
                 }
             });
 
-            $('#namnns').keypress(function (e) {
-                if (e.which == 13) {
-                    {
-                        create();
-                        $(this).val("");
-                    }
-                }
-            });
 
             function editNameApi() {
 
                 vm = {
-                    Name: $("#namnet").text(),
+                    Name: $("#ToDoName").text(),
                     Id: IdFranDiv
                 };
                 console.log(vm.Name);

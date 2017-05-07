@@ -19,27 +19,16 @@ namespace ToDoList.Controllers.API
         {
             _context = new ApplicationDbContext();
         }
-        [HttpGet]
-        public IEnumerable<TaskDto> GetTasks(string ToDoI = null)
-        {
-            int ToDoId = Convert.ToInt32(ToDoI);
-            var TaskQuery = _context.Tasks.Where(t=>t.ToDoId == ToDoId);
 
-            //if (!string.IsNullOrWhiteSpace(ToDoI))
-            //    TaskQuery = TaskQuery.SingleOrDefault(t => t.Id == 68);
+        [HttpGet]
+        public IEnumerable<TaskDto> GetTasks(int ToDoI)
+        {
+            //int ToDoId = Convert.ToInt32(ToDoI);
+            var TaskQuery = _context.Tasks.Where(t=>t.ToDoId == ToDoI);
 
 
             return TaskQuery.ToList().Select(Mapper.Map<Tasks, TaskDto>);
         }
-
-        //[HttpGet]
-        //public IHttpActionResult GetTask(int id)
-        //{
-        //    var Tasks = _context.Tasks.SingleOrDefault(t => t.Id == id);
-        //    if (Tasks == null)
-        //        return NotFound();
-        //    return Ok(Mapper.Map<Tasks, TaskDto>(Tasks));
-        //}
 
         [HttpPost]
         public IHttpActionResult CreateToDo(TaskDto TaskDto)
