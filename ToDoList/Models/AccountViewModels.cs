@@ -76,7 +76,7 @@ namespace ToDoList.Models
         public string Password { get; set; }
 
         [DataType(DataType.Password)]
-        [Display(Name = "Upprepa lösenord")]
+        [Display(Name = "Upprepa lösenordet")]
         [Compare("Password", ErrorMessage = "Lösenorden måste matcha.")]
         public string ConfirmPassword { get; set; }
     }

@@ -44,8 +44,8 @@ namespace ToDoList.Controllers.API
         [HttpDelete]
         public void DeleteToDo(int Id)
         {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            //if (!ModelState.IsValid)
+            //    throw new HttpResponseException(HttpStatusCode.BadRequest);
 
 
 
@@ -70,8 +70,8 @@ namespace ToDoList.Controllers.API
         [HttpPut]
         public void UpdateToDo(ToDoDto toDoDto)
         {
-            if (!ModelState.IsValid)
-                throw new HttpResponseException(HttpStatusCode.BadRequest);
+            //if (!ModelState.IsValid)
+            //    throw new HttpResponseException(HttpStatusCode.BadRequest);
 
             var ToDoInDb = _context.Todos.SingleOrDefault(c => c.Id == toDoDto.Id);
 
