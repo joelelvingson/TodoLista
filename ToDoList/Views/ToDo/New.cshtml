@@ -5,7 +5,7 @@
 }
 <form id="newRental">
     <div class="container">
-        <h2>Dina listor</h2>
+        <h2>Mina listor</h2>
         <div id="newToDo">
             @foreach (var item in Model.ToDos)
             {
@@ -65,6 +65,12 @@
                 var vm = {
                     name: name
                 };
+
+                if (name == "") {
+                    $("#fel").text("Du måste ange ett namn.");
+                }
+                else {
+
                 $.ajax({
                     url: "/api/ToDo/",
                     method: "post",
@@ -77,11 +83,14 @@
 
                     },
                     error: function () {
-                        $("#fel").text("Du måste ange ett namn.");
+                        $("#fel").text("Något gick fel.");
                         $("#namnet").css("border", "2px solid red");
 
                     }
                 });
+
+                }
+
 
             };
 

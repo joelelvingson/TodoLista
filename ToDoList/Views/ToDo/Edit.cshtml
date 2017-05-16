@@ -6,15 +6,6 @@
 <div class="container">
     <div class="col-sm-offset-4 col-sm-4">
         <h2 id="ToDoName">@Model.Todo.Name</h2>
-        @*<div class="form-group">
-            @*<form name="toDoList" class="col-sm-offset-2">            </form>*@
-            @*<div class="form-horizontal">
-                <button id="AddToDo" class="btn btn-primary">Add</button>
-                    <input type="text" name="ListItem" id="ToDoInput" class="form-control" />
-
-                    <label id="fel" style="color:red;"></label>
-            </div>*@
-        @*</div>*@
 
         <div class="row">
             <div class="col-lg-12">
@@ -80,6 +71,8 @@
                 }
             });
             var IdFranDiv = $('#hamta').attr('ToDoId')
+
+            //GET API
             //$.ajax({
 
             //    url: "/api/Task?ToDoI=" + IdFranDiv,
@@ -225,19 +218,22 @@
                 $('#txt_fullname').focus();
             };
 
+            
             $(document).on('blur', '#txt_fullname', function () {
                 var name = $(this).val();
                 $('#ToDoName').text(name);
                 editNameApi();
             });
 
+
             $('#ToDoName').keypress(function (e) {
                 if (e.which == 13) {//Enter key pressed
                     {
-                       
-                        var name = $(this).val();
-                        $('#ToDoName').text(name);
-                        editNameApi();
+                        var temp = document.activeElement;
+                        temp.blur();
+                        //var name = $(this).val();
+                        //$('#ToDoName').text(name);
+                        //editNameApi();
                     }
                 }
             });
